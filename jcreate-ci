@@ -1,0 +1,78 @@
+#!/bin/bash
+
+#
+#    Download and set CodeIgniter with:
+#	- HMVC
+#	- CI Native Session
+#	- Facebook PHP SDK
+#	- HTML5 Boilerplate
+#	
+#    More documentation: 
+#	- http://josemato.name/instalar-codeigniter-con-un-clic
+#
+
+if [ "$1" = "" ]; then
+	echo "Error: Especifica el nombre del proyecto"
+	exit
+fi
+
+if [ -d "$1" ]; then
+	echo "Error: El proyecto ya existe"
+	exit
+fi
+
+mkdir $1
+cd $1
+
+# download CI
+echo http://ellislab.com/codeigniter/download | xargs wget -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+
+# download HMVC
+echo "https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/get/fecd39ccdf56.zip" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+
+# download native session
+echo "https://github.com/atomicon/codeigniter-native-session/archive/master.zip" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+
+#download facebook sdk
+echo "https://github.com/facebook/facebook-php-sdk/archive/master.zip" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+
+# download html5boilerplate
+echo "https://github.com/h5bp/html5-boilerplate/zipball/v4.3.0" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+
+# create assets resources
+mkdir assets
+mkdir assets/js assets/css assets/images
+mv h5bp-html5-boilerplate-72cdf1e/css/* assets/css/
+mv h5bp-html5-boilerplate-72cdf1e/js/* assets/js/
+mv h5bp-html5-boilerplate-72cdf1e/index.html application/views/main-layout.php
+
+sed -i.bak 's/href="css/href="assets\/css/g' application/views/main-layout.php
+sed -i.bak 's/src="js/src="assets\/js/g' application/views/main-layout.php
+
+# install HMVC
+mv wiredesignz-codeigniter-modular-extensions-hmvc-fecd39ccdf56/core/* application/core/
+mv wiredesignz-codeigniter-modular-extensions-hmvc-fecd39ccdf56/third_party/MX/ application/third_party/
+mkdir application/modules
+mkdir application/modules/welcome
+mkdir application/modules/welcome/controllers
+mkdir application/modules/welcome/views
+mv application/controllers/welcome.php application/modules/welcome/controllers/
+mv application/views/welcome_message.php application/modules/welcome/views/
+
+# install sessions
+mv codeigniter-native-session-master/config/session.php application/config/
+mv codeigniter-native-session-master/libraries/MY_Session.php application/libraries/
+
+# install facebook sdk
+mv facebook-php-sdk-master/src/* application/libraries/
+
+# delete files
+rm -r h5bp-html5-boilerplate-72cdf1e
+rm -r wiredesignz-codeigniter-modular-extensions-hmvc-fecd39ccdf56
+rm -r codeigniter-native-session-master
+rm -r facebook-php-sdk-master
+rm .gitignore
+rm application/views/*.bak
+rm .travis.yml
+rm license.txt
+rm -r user_guide
