@@ -1,4 +1,4 @@
-<h2>jcreate-ci</h2>
+<h2>CodeIgniter One Click</h2>
 <p>Script to download and set CodeIgniter with:</p>
 <ul>
 <li>HMVC</li>
