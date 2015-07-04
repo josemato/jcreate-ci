@@ -7,6 +7,7 @@
 #	- HTML5 Boilerplate
 
 #	My upgrades:
+#	- Change script name
 #	- Updated versions of ci and plugins
 #	- .htaccess to remo index.php
 #	- Default controller home, ready to use
