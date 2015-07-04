@@ -76,3 +76,4 @@ rm -r html5-boilerplate-master
 rm -r wiredesignz-codeigniter-modular-extensions-hmvc-53edddfc167e
 rm license.txt
 rm -r user_guide
+rm application/views/*.bak
