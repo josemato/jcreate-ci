@@ -23,21 +23,21 @@ mkdir $1
 cd $1
 
 # download CI
-curl -Lo "temp.zip" https://github.com/bcit-ci/CodeIgniter/archive/3.0.0.zip; unzip temp.zip; rm temp.zip;
+curl -Lo "temp.zip" https://github.com/bcit-ci/CodeIgniter/archive/3.0.0.zip && unzip temp.zip && rm temp.zip
 mv CodeIgniter-3.0.0/* .
 rmdir CodeIgniter-3.0.0
 
 # download HMVC
-curl -Lo "temp.zip" https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/get/53edddfc167e.zip; unzip temp.zip; rm temp.zip;
+curl -Lo "temp.zip" https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/get/53edddfc167e.zip && unzip temp.zip && rm temp.zip
 
 # download native session
-curl -Lo "temp.zip" https://github.com/atomicon/codeigniter-native-session/archive/master.zip; unzip temp.zip; rm temp.zip;
+curl -Lo "temp.zip" https://github.com/atomicon/codeigniter-native-session/archive/master.zip && unzip temp.zip && rm temp.zip
 
 #download facebook sdk
-curl -Lo "temp.zip" https://github.com/facebook/facebook-php-sdk-v4/archive/4.0-dev.zip; unzip temp.zip; rm temp.zip;
+curl -Lo "temp.zip" https://github.com/facebook/facebook-php-sdk-v4/archive/4.0-dev.zip && unzip temp.zip && rm temp.zip
 
 # download html5boilerplate
-curl -Lo "temp.zip" https://github.com/h5bp/html5-boilerplate/archive/master.zip; unzip temp.zip; rm temp.zip;
+curl -Lo "temp.zip" https://github.com/h5bp/html5-boilerplate/archive/master.zip && unzip temp.zip && rm temp.zip
 
 
 # create assets resources
