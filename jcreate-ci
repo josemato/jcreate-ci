@@ -5,13 +5,6 @@
 #	- CI Native Session
 #	- Facebook PHP SDK
 #	- HTML5 Boilerplate
-
-#	My upgrades:
-#	- Change script name
-#	- Updated versions of ci and plugins
-#	- .htaccess to remo index.php
-#	- Default controller home, ready to use
-#	- Main Layout ready to use
 #	
 # 	Official repository https://github.com/josemato/jcreate-ci. 
 #	More info in http://josemato.name/instalar-codeigniter-con-un-clic
@@ -102,14 +95,3 @@ rm -r readme.rst
 rm application/views/*.bak
 rm application/modules/home/controllers/*.bak
 rm application/config/*.bak
-
-# create .htaccess to remote index.php in the URL
-echo '<IfModule mod_rewrite.c>' > .htaccess
-echo '	RewriteEngine On' >> .htaccess
-echo '	RewriteBase /' >> .htaccess
-echo '	RewriteRule ^index.php$ - [L]' >> .htaccess
-echo '	RewriteCond %{REQUEST_FILENAME} !-f' >> .htaccess
-echo '	RewriteCond %{REQUEST_FILENAME} !-d' >> .htaccess
-echo '	RewriteRule . /index.php [L]' >> .htaccess
-echo '</IfModule>' >> .htaccess
-
