@@ -8,7 +8,6 @@
 </ul>
 <p>My upgrades:</p>
 <ul>
-<li>Change script name</li>
 <li>Updated versions of ci and plugins</li>
 <li>.htaccess to remo index.php</li>
 <li>Default controller home, ready to use </li>
