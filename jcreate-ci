@@ -1,15 +1,20 @@
 #!/bin/bash
 
-#
-#    Download and set CodeIgniter with:
+#	Script to download and set CodeIgniter with:#
 #	- HMVC
 #	- CI Native Session
 #	- Facebook PHP SDK
 #	- HTML5 Boilerplate
+
+#	My upgrades:
+#	- Change script name
+#	- Updated versions of ci and plugins
+#	- .htaccess to remo index.php
+#	- Default controller home, ready to use
+#	- Main Layout ready to use
 #	
-#    More documentation: 
-#	- http://josemato.name/instalar-codeigniter-con-un-clic
-#
+# 	Official repository https://github.com/josemato/jcreate-ci. 
+#	More info in http://josemato.name/instalar-codeigniter-con-un-clic
 
 if [ "$1" = "" ]; then
 	echo "Error: Especifica el nombre del proyecto"
@@ -25,54 +30,86 @@ mkdir $1
 cd $1
 
 # download CI
-echo http://ellislab.com/codeigniter/download | xargs wget -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+curl -Lo "temp.zip" https://github.com/bcit-ci/CodeIgniter/archive/3.0.0.zip; unzip temp.zip; rm temp.zip;
+mv CodeIgniter-3.0.0/* .
+rmdir CodeIgniter-3.0.0
 
 # download HMVC
-echo "https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/get/fecd39ccdf56.zip" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+curl -Lo "temp.zip" https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/get/53edddfc167e.zip; unzip temp.zip; rm temp.zip;
 
 # download native session
-echo "https://github.com/atomicon/codeigniter-native-session/archive/master.zip" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+curl -Lo "temp.zip" https://github.com/atomicon/codeigniter-native-session/archive/master.zip; unzip temp.zip; rm temp.zip;
 
 #download facebook sdk
-echo "https://github.com/facebook/facebook-php-sdk/archive/master.zip" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+curl -Lo "temp.zip" https://github.com/facebook/facebook-php-sdk-v4/archive/4.0-dev.zip; unzip temp.zip; rm temp.zip;
 
 # download html5boilerplate
-echo "https://github.com/h5bp/html5-boilerplate/zipball/v4.3.0" | xargs wget --no-check-certificate -qO- -O tmp.zip; unzip tmp.zip; rm tmp.zip;
+curl -Lo "temp.zip" https://github.com/h5bp/html5-boilerplate/archive/master.zip; unzip temp.zip; rm temp.zip;
+
 
 # create assets resources
 mkdir assets
 mkdir assets/js assets/css assets/images
-mv h5bp-html5-boilerplate-72cdf1e/css/* assets/css/
-mv h5bp-html5-boilerplate-72cdf1e/js/* assets/js/
-mv h5bp-html5-boilerplate-72cdf1e/index.html application/views/main-layout.php
+mv html5-boilerplate-master/dist/css/* assets/css/
+mv html5-boilerplate-master/dist/js/* assets/js/
+mv html5-boilerplate-master/dist/index.html application/views/main_layout.php
 
-sed -i.bak 's/href="css/href="assets\/css/g' application/views/main-layout.php
-sed -i.bak 's/src="js/src="assets\/js/g' application/views/main-layout.php
+sed -i.bak 's/href="css/href="assets\/css/g' application/views/main_layout.php
+sed -i.bak 's/src="js/src="assets\/js/g' application/views/main_layout.php
+sed -i.bak 's/\<p\>Hello world! This is HTML5 Boilerplate.\<\/p\>/\<?php echo $module; ?\>/g' application/views/main_layout.php
 
 # install HMVC
-mv wiredesignz-codeigniter-modular-extensions-hmvc-fecd39ccdf56/core/* application/core/
-mv wiredesignz-codeigniter-modular-extensions-hmvc-fecd39ccdf56/third_party/MX/ application/third_party/
+mv wiredesignz-codeigniter-modular-extensions-hmvc-53edddfc167e/core/* application/core/
+mv wiredesignz-codeigniter-modular-extensions-hmvc-53edddfc167e/third_party/MX/ application/third_party/
 mkdir application/modules
-mkdir application/modules/welcome
-mkdir application/modules/welcome/controllers
-mkdir application/modules/welcome/views
-mv application/controllers/welcome.php application/modules/welcome/controllers/
-mv application/views/welcome_message.php application/modules/welcome/views/
+mkdir application/modules/home
+mkdir application/modules/home/controllers
+mkdir application/modules/home/views
+mv application/controllers/welcome.php application/modules/home/controllers/Home.php
+rm application/views/welcome_message.php 
+echo '<p>Hello world! This is HTML5 Boilerplate.</p>' > application/modules/home/views/main.php
+
+# modify home controller to work with HMVC and master view
+sed -i.bak "s/\$this->load->view('welcome_message');/\$view = 'main';|\$data_module = '';||\$data['module'] = \$this->load->view(\$view, \$data_module, true);|\$this->load->view('main_layout', \$data);/g" application/modules/home/controllers/Home.php
+sed -e $'s/|/\\\n\t\t/g' -i.bak application/modules/home/controllers/Home.php
+
+sed -i.bak 's/CI_Controller/MX_Controller/g' application/modules/home/controllers/Home.php
+sed -i.bak 's/Welcome/Home/g' application/modules/home/controllers/Home.php
+
+# change default controller in the config
+sed -i.bak 's/welcome/home/g' application/config/routes.php
+sed -i.bak "s/'index.php';/'';/g" application/config/config.php
 
 # install sessions
 mv codeigniter-native-session-master/config/session.php application/config/
 mv codeigniter-native-session-master/libraries/MY_Session.php application/libraries/
 
 # install facebook sdk
-mv facebook-php-sdk-master/src/* application/libraries/
+mv facebook-php-sdk-v4-4.0-dev/src/* application/libraries/
 
 # delete files
-rm -r h5bp-html5-boilerplate-72cdf1e
-rm -r wiredesignz-codeigniter-modular-extensions-hmvc-fecd39ccdf56
 rm -r codeigniter-native-session-master
-rm -r facebook-php-sdk-master
-rm .gitignore
-rm application/views/*.bak
-rm .travis.yml
+rm -r facebook-php-sdk-v4-4.0-dev
+rm -r html5-boilerplate-master
+rm -r wiredesignz-codeigniter-modular-extensions-hmvc-53edddfc167e
+
 rm license.txt
 rm -r user_guide
+rm -r composer.json   
+rm -r contributing.md 
+rm -r readme.rst
+
+rm application/views/*.bak
+rm application/modules/home/controllers/*.bak
+rm application/config/*.bak
+
+# create .htaccess to remote index.php in the URL
+echo '<IfModule mod_rewrite.c>' > .htaccess
+echo '	RewriteEngine On' >> .htaccess
+echo '	RewriteBase /' >> .htaccess
+echo '	RewriteRule ^index.php$ - [L]' >> .htaccess
+echo '	RewriteCond %{REQUEST_FILENAME} !-f' >> .htaccess
+echo '	RewriteCond %{REQUEST_FILENAME} !-d' >> .htaccess
+echo '	RewriteRule . /index.php [L]' >> .htaccess
+echo '</IfModule>' >> .htaccess
+

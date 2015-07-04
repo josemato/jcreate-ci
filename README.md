@@ -6,4 +6,6 @@
 <li>Facebook PHP SDK</li>
 <li>HTML5 Boilerplate</li>
 </ul>
-<p>More info in <a href="http://josemato.name/instalar-codeigniter-con-un-clic">http://josemato.name/instalar-codeigniter-con-un-clic</a></p>
+
+<p>Official repository <a href="https://github.com/josemato/jcreate-ci">https://github.com/josemato/jcreate-ci</a>. <br> 
+More info in <a href="http://josemato.name/instalar-codeigniter-con-un-clic">http://josemato.name/instalar-codeigniter-con-un-clic</a></p>
