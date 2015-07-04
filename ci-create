@@ -1,15 +1,19 @@
 #!/bin/bash
 
-#
-#    Download and set CodeIgniter with:
+#	Script to download and set CodeIgniter with:#
 #	- HMVC
 #	- CI Native Session
 #	- Facebook PHP SDK
 #	- HTML5 Boilerplate
+
+#	My upgrades:
+#	- Updated versions of ci and plugins
+#	- .htaccess to remo index.php
+#	- Default controller home, ready to use
+#	- Main Layout ready to use
 #	
-#    More documentation: 
-#	- http://josemato.name/instalar-codeigniter-con-un-clic
-#
+# 	Official repository https://github.com/josemato/jcreate-ci. 
+#	More info in http://josemato.name/instalar-codeigniter-con-un-clic
 
 if [ "$1" = "" ]; then
 	echo "Error: Especifica el nombre del proyecto"
@@ -65,7 +69,9 @@ rm application/views/welcome_message.php
 echo '<p>Hello world! This is HTML5 Boilerplate.</p>' > application/modules/home/views/main.php
 
 # modify home controller to work with HMVC and master view
-sed -i.bak "s/\$this->load->view('welcome_message');/\$view = 'main';\$data_module = '';\$data['module'] = \$this->load->view(\$view, \$data_module, true);\$this->load->view('main_layout', \$data);/g" application/modules/home/controllers/Home.php
+sed -i.bak "s/\$this->load->view('welcome_message');/\$view = 'main';|\$data_module = '';||\$data['module'] = \$this->load->view(\$view, \$data_module, true);|\$this->load->view('main_layout', \$data);/g" application/modules/home/controllers/Home.php
+sed -e $'s/|/\\\n\t\t/g' -i.bak application/modules/home/controllers/Home.php
+
 sed -i.bak 's/CI_Controller/MX_Controller/g' application/modules/home/controllers/Home.php
 sed -i.bak 's/Welcome/Home/g' application/modules/home/controllers/Home.php
 
@@ -85,8 +91,13 @@ rm -r codeigniter-native-session-master
 rm -r facebook-php-sdk-v4-4.0-dev
 rm -r html5-boilerplate-master
 rm -r wiredesignz-codeigniter-modular-extensions-hmvc-53edddfc167e
+
 rm license.txt
 rm -r user_guide
+rm -r composer.json   
+rm -r contributing.md 
+rm -r readme.rst
+
 rm application/views/*.bak
 rm application/modules/home/controllers/*.bak
 rm application/config/*.bak
